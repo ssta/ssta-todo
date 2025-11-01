@@ -119,9 +119,9 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [x] Add validation annotations (@Size, @Min, @Max)
 
 3. **Create Status Enum**
-   - [ ] Create `TodoStatus` enum with values: TODO, IN_PROGRESS, COMPLETE
-   - [ ] Add `next()` method to cycle through statuses
-   - [ ] Add display labels for UI
+    - [x] Create `TodoStatus` enum with values: TODO, IN_PROGRESS, COMPLETE
+    - [x] Add `next()` method to cycle through statuses
+    - [x] Add display labels for UI
 
 4. **Create Repository Layer**
    - [ ] Create `TodoItemRepository` interface extending `JpaRepository<TodoItem, Long>`
