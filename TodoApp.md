@@ -298,6 +298,86 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
       - [ ] Create schema if needed
       - [ ] Data migration strategy
 
+### Phase 8: Future Enhancements (Planned)
+
+26. **Dark Mode Support**
+    - [ ] Add theme toggle component to main view (top right corner)
+    - [ ] Implement theme state management:
+        - [ ] Store theme preference in UserPreferences entity
+        - [ ] Add `darkMode` boolean field to UserPreferences
+        - [ ] Persist theme selection across sessions
+    - [ ] Configure Vaadin Lumo theme variants:
+        - [ ] Use `UI.getCurrent().getElement().setAttribute("theme", "dark")` for dark mode
+        - [ ] Use `UI.getCurrent().getElement().setAttribute("theme", "")` for light mode
+    - [ ] Create toggle button with sun/moon icons
+    - [ ] Apply theme on application startup based on saved preference
+    - [ ] Test all UI components in both light and dark modes
+    - [ ] Ensure proper contrast and readability in dark mode
+
+27. **File Attachments for TODO Items**
+    - [ ] Extend TodoItem entity for file attachments:
+        - [ ] Create `Attachment` entity with fields:
+            - [ ] `id` (Long, auto-generated)
+            - [ ] `fileName` (String)
+            - [ ] `fileSize` (Long)
+            - [ ] `contentType` (String)
+            - [ ] `fileData` (byte[], or file path for file system storage)
+            - [ ] `uploadedDate` (LocalDateTime)
+            - [ ] `todoItemId` (Long, foreign key)
+        - [ ] Add one-to-many relationship between TodoItem and Attachment
+        - [ ] Create `AttachmentRepository`
+        - [ ] Create `AttachmentService` with upload/download/delete methods
+    - [ ] Update TodoItemForm for file handling:
+        - [ ] Add drag-and-drop file upload component (Vaadin Upload)
+        - [ ] Display list of current attachments with delete option
+        - [ ] Support multiple file uploads
+        - [ ] Add basic file size validation (e.g., max 10MB per file) to prevent accidental huge uploads
+    - [ ] Update MainView grid:
+        - [ ] Add attachment count indicator column (e.g., "📎 3")
+        - [ ] Show icon only when attachments exist
+        - [ ] Consider tooltip showing file names on hover
+    - [ ] Implement file storage strategy:
+        - [ ] Option 1: Store files as BLOB in database (simpler, for small files)
+        - [ ] Option 2: Store files on filesystem, save path in database (for larger files)
+        - [ ] Create file cleanup service for deleted TODO items
+    - [ ] Add download functionality:
+        - [ ] Implement endpoint for file downloads
+        - [ ] Add click handler to download files from attachment list
+
+28. **Display Detailed Notes from Grid**
+    - [ ] Add visual indicator in grid for items with detailed notes:
+        - [ ] Add icon/badge column (e.g., "📝" or "💬") that appears only when detailedNotes is not null/empty
+        - [ ] Consider combining with description column or separate column
+    - [ ] Implement display options (choose one approach):
+        - [ ] Option 1: Modal Dialog - Click icon to open full dialog showing rendered detailed notes
+        - [ ] Option 2: Tooltip on Hover - Show preview/full notes on hovering over icon or description
+        - [ ] Option 3: Expandable Row - Click icon to expand row and show notes inline below the item
+        - [ ] Option 4: Side Panel - Click icon to open side drawer with notes
+    - [ ] Render detailed notes appropriately:
+        - [ ] If plain text: display in simple text format
+        - [ ] If markdown (after step 29): render as formatted HTML
+    - [ ] Consider additional features:
+        - [ ] Truncate long notes in preview/tooltip
+        - [ ] Add "Quick Edit" button in dialog to jump directly to editing notes
+        - [ ] Show character count or indication of note length
+
+29. **Markdown Support for Detailed Notes**
+    - [ ] Add markdown editor dependency:
+        - [ ] Add Vaadin markdown-editor-addon to build.gradle
+        - [ ] Verify the addon includes rendering capabilities
+    - [ ] Modify TodoItemForm:
+        - [ ] Replace TextArea with markdown editor component
+        - [ ] The addon should provide toolbar with formatting buttons (bold, italic, lists, links, etc.)
+        - [ ] Enable live preview if supported by the addon
+    - [ ] Display rendered markdown:
+        - [ ] Use the addon's built-in rendering for displaying notes
+        - [ ] Consider modal dialog or expandable section for viewing full formatted notes
+    - [ ] Migration approach:
+        - [ ] Simply treat all existing `detailedNotes` as markdown text
+        - [ ] Plain text will render as plain text in markdown (no special handling needed)
+        - [ ] No database schema changes required
+        - [ ] No need for format field - markdown handles plain text gracefully
+
 ---
 
 ## Technical Notes

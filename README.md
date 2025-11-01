@@ -210,12 +210,42 @@ org.gradle.java.home=C:\\Program Files\\Java\\jdk-21
 
 Planned improvements for future versions:
 
+### Phase 7: Database Migration
 - PostgreSQL support for production deployments
+- Data migration strategy from H2 to PostgreSQL
+
+### Phase 8: User Experience Enhancements
+
+- **Dark Mode**: Toggle button to switch between light and dark themes
+    - Theme preference persisted across sessions
+    - Full Vaadin Lumo theme integration
+
+- **File Attachments**: Support for attaching files to TODO items
+    - Drag-and-drop file upload in edit form
+    - Multiple file attachments per item
+    - Visual indicator in grid showing attachment count
+    - File storage (database BLOB or filesystem)
+    - File download functionality
+
+- **Display Detailed Notes from Grid**: Quick access to detailed notes without opening edit form
+    - Visual indicator (icon/badge) in grid for items with notes
+    - Multiple display options: modal dialog, tooltip, expandable row, or side panel
+    - Quick edit capability from notes display
+    - Works with both plain text and markdown (once implemented)
+
+- **Markdown Support**: Rich text editing for detailed notes
+    - Markdown editor with live preview (using Vaadin markdown-editor-addon)
+    - Syntax toolbar (bold, italic, lists, links, code blocks)
+    - Rendered markdown display for viewing notes
+    - Seamless migration - existing plain text notes work as-is in markdown
+
+### Future Considerations
 - Multi-user support with authentication
 - Search and advanced filtering
 - Categories and tags
 - Recurring tasks
 - Export/import functionality
+- Email notifications for due dates
 
 ## License
 
