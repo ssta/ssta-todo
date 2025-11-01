@@ -10,9 +10,13 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +25,8 @@ import java.util.List;
 
 @Route("")
 public class MainView extends VerticalLayout {
+
+  private static final Logger logger = LoggerFactory.getLogger(MainView.class);
 
   private final UserPreferencesService preferencesService;
   private final TodoItemService todoItemService;
@@ -39,7 +45,17 @@ public class MainView extends VerticalLayout {
     this.todoItemService = todoItemService;
 
     // Load current preferences
-    currentPreferences = preferencesService.getPreferences();
+    try {
+      currentPreferences = preferencesService.getPreferences();
+    } catch (Exception e) {
+      logger.error("Failed to load user preferences", e);
+      showErrorNotification("Failed to load user preferences. Using defaults.");
+      // Create default preferences as fallback
+      currentPreferences = new UserPreferences();
+      currentPreferences.setShowTodo(true);
+      currentPreferences.setShowInProgress(true);
+      currentPreferences.setShowComplete(true);
+    }
 
     // Create title
     H1 title = new H1("TODO Application");
@@ -113,7 +129,12 @@ public class MainView extends VerticalLayout {
   }
 
   private void updatePreferences() {
-    preferencesService.updatePreferences(currentPreferences);
+    try {
+      preferencesService.updatePreferences(currentPreferences);
+    } catch (Exception e) {
+      logger.error("Failed to update user preferences", e);
+      showErrorNotification("Failed to save filter preferences. Your settings may not be preserved.");
+    }
   }
 
   private Grid<TodoItem> createGrid() {
@@ -282,33 +303,39 @@ public class MainView extends VerticalLayout {
   }
 
   private void refreshGrid() {
-    // Apply filtering based on checkbox states
-    List<TodoStatus> statusesToShow = new ArrayList<>();
+    try {
+      // Apply filtering based on checkbox states
+      List<TodoStatus> statusesToShow = new ArrayList<>();
 
-    if (currentPreferences.getShowTodo()) {
-      statusesToShow.add(TodoStatus.TODO);
-    }
-    if (currentPreferences.getShowInProgress()) {
-      statusesToShow.add(TodoStatus.IN_PROGRESS);
-    }
-    if (currentPreferences.getShowComplete()) {
-      statusesToShow.add(TodoStatus.COMPLETE);
-    }
+      if (currentPreferences.getShowTodo()) {
+        statusesToShow.add(TodoStatus.TODO);
+      }
+      if (currentPreferences.getShowInProgress()) {
+        statusesToShow.add(TodoStatus.IN_PROGRESS);
+      }
+      if (currentPreferences.getShowComplete()) {
+        statusesToShow.add(TodoStatus.COMPLETE);
+      }
 
-    // Get filtered items from service
-    List<TodoItem> items;
-    if (statusesToShow.isEmpty()) {
-      // If no statuses selected, show empty list
-      items = new ArrayList<>();
-    } else if (statusesToShow.size() == 3) {
-      // If all statuses selected, get all items (optimization)
-      items = todoItemService.findAll();
-    } else {
-      // Get items with selected statuses
-      items = todoItemService.findByStatus(statusesToShow.toArray(new TodoStatus[0]));
-    }
+      // Get filtered items from service
+      List<TodoItem> items;
+      if (statusesToShow.isEmpty()) {
+        // If no statuses selected, show empty list
+        items = new ArrayList<>();
+      } else if (statusesToShow.size() == 3) {
+        // If all statuses selected, get all items (optimization)
+        items = todoItemService.findAll();
+      } else {
+        // Get items with selected statuses
+        items = todoItemService.findByStatus(statusesToShow.toArray(new TodoStatus[0]));
+      }
 
-    grid.setItems(items);
+      grid.setItems(items);
+    } catch (Exception e) {
+      logger.error("Failed to refresh grid", e);
+      showErrorNotification("Failed to load TODO items. Please try refreshing the page.");
+      grid.setItems(new ArrayList<>());
+    }
   }
 
   private void saveTodoItem(TodoItem item) {
@@ -316,9 +343,13 @@ public class MainView extends VerticalLayout {
       todoItemService.save(item);
       refreshGrid();
       closeForm();
+      showSuccessNotification("TODO item saved successfully.");
+    } catch (IllegalArgumentException e) {
+      logger.warn("Validation error while saving TODO item", e);
+      showErrorNotification("Validation error: " + e.getMessage());
     } catch (Exception e) {
-      // TODO: Show error notification to user (will be implemented in step 20)
-      e.printStackTrace();
+      logger.error("Failed to save TODO item", e);
+      showErrorNotification("Failed to save TODO item. Please try again.");
     }
   }
 
@@ -342,10 +373,13 @@ public class MainView extends VerticalLayout {
       try {
         todoItemService.delete(item.getId());
         refreshGrid();
-        // TODO: Show success notification (will be implemented in step 20)
+        showSuccessNotification("TODO item deleted successfully.");
+      } catch (IllegalArgumentException e) {
+        logger.warn("Validation error while deleting TODO item", e);
+        showErrorNotification("Error: " + e.getMessage());
       } catch (Exception e) {
-        // TODO: Show error notification (will be implemented in step 20)
-        e.printStackTrace();
+        logger.error("Failed to delete TODO item", e);
+        showErrorNotification("Failed to delete TODO item. Please try again.");
       }
     });
 
@@ -356,9 +390,12 @@ public class MainView extends VerticalLayout {
     try {
       todoItemService.cycleStatus(item.getId());
       refreshGrid();
+    } catch (IllegalArgumentException e) {
+      logger.warn("Validation error while cycling status", e);
+      showErrorNotification("Error: " + e.getMessage());
     } catch (Exception e) {
-      // TODO: Show error notification to user (will be implemented in step 20)
-      e.printStackTrace();
+      logger.error("Failed to update TODO item status", e);
+      showErrorNotification("Failed to update status. Please try again.");
     }
   }
 
@@ -370,5 +407,21 @@ public class MainView extends VerticalLayout {
   private void openFormForNewItem() {
     form.setTodoItem(new TodoItem());
     form.setVisible(true);
+  }
+
+  /**
+   * Show an error notification to the user
+   */
+  private void showErrorNotification(String message) {
+    Notification notification = Notification.show(message, 5000, Notification.Position.TOP_CENTER);
+    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+  }
+
+  /**
+   * Show a success notification to the user
+   */
+  private void showSuccessNotification(String message) {
+    Notification notification = Notification.show(message, 3000, Notification.Position.TOP_CENTER);
+    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
   }
 }
