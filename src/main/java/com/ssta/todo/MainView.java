@@ -193,9 +193,14 @@ public class MainView extends VerticalLayout {
   }
 
   private void saveTodoItem(TodoItem item) {
-    // TODO: This will be wired to the service in later steps
-    // For now, this is a placeholder
-    closeForm();
+    try {
+      todoItemService.save(item);
+      refreshGrid();
+      closeForm();
+    } catch (Exception e) {
+      // TODO: Show error notification to user (will be implemented in step 20)
+      e.printStackTrace();
+    }
   }
 
   private void editTodoItem(TodoItem item) {
