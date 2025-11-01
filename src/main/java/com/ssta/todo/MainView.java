@@ -128,8 +128,11 @@ public class MainView extends VerticalLayout {
         case COMPLETE -> statusSpan.getElement().getThemeList().add("badge success");
       }
 
-      // Make it clickable (will be wired in step 12)
+      // Make it clickable and add click handler to cycle status
       statusSpan.getStyle().set("cursor", "pointer");
+      statusSpan.getElement().addEventListener("click", event -> {
+        cycleItemStatus(item);
+      });
 
       return statusSpan;
     }).setHeader("Status").setKey("status").setFlexGrow(0).setWidth("150px");
@@ -209,6 +212,16 @@ public class MainView extends VerticalLayout {
 
   private void deleteTodoItem(TodoItem item) {
     // TODO: This will be implemented in step 18
+  }
+
+  private void cycleItemStatus(TodoItem item) {
+    try {
+      todoItemService.cycleStatus(item.getId());
+      refreshGrid();
+    } catch (Exception e) {
+      // TODO: Show error notification to user (will be implemented in step 20)
+      e.printStackTrace();
+    }
   }
 
   private void closeForm() {

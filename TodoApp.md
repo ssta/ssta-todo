@@ -195,10 +195,10 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [x] Configure grid styling and responsiveness
 
 12. **Implement Status Column**
-    - [ ] Create custom component for status display (Button or Span with click handler)
-    - [ ] Add visual styling for each status (colors/icons)
-    - [ ] Implement click handler to call `cycleStatus()` service method
-    - [ ] Refresh grid after status change
+    - [x] Create custom component for status display (Button or Span with click handler)
+    - [x] Add visual styling for each status (colors/icons)
+    - [x] Implement click handler to call `cycleStatus()` service method
+    - [x] Refresh grid after status change
 
 13. **Implement Due Date Visual Indicators**
     - [ ] Add cell style generator for Due Date column:
