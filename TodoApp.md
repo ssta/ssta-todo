@@ -106,17 +106,17 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
    - [x] Set up basic project structure (flat package layout for simplicity)
 
 2. **Create Domain Model**
-   - [ ] Create `TodoItem` entity class with fields:
-     - [ ] `id` (Long, auto-generated)
-     - [ ] `description` (String, max 400 chars, required)
-     - [ ] `detailedNotes` (String, optional, text type)
-     - [ ] `status` (Enum: TODO, IN_PROGRESS, COMPLETE)
-     - [ ] `priority` (Integer, 1-5, optional)
-     - [ ] `dueDate` (LocalDate, optional)
-     - [ ] `createdDate` (LocalDateTime, auto-set)
-     - [ ] `updatedDate` (LocalDateTime, auto-update)
-   - [ ] Add JPA annotations (@Entity, @Id, @GeneratedValue, etc.)
-   - [ ] Add validation annotations (@Size, @Min, @Max)
+    - [x] Create `TodoItem` entity class with fields:
+        - [x] `id` (Long, auto-generated)
+        - [x] `description` (String, max 400 chars, required)
+        - [x] `detailedNotes` (String, optional, text type)
+        - [x] `status` (Enum: TODO, IN_PROGRESS, COMPLETE)
+        - [x] `priority` (Integer, 1-5, optional)
+        - [x] `dueDate` (LocalDate, optional)
+        - [x] `createdDate` (LocalDateTime, auto-set)
+        - [x] `updatedDate` (LocalDateTime, auto-update)
+    - [x] Add JPA annotations (@Entity, @Id, @GeneratedValue, etc.)
+    - [x] Add validation annotations (@Size, @Min, @Max)
 
 3. **Create Status Enum**
    - [ ] Create `TodoStatus` enum with values: TODO, IN_PROGRESS, COMPLETE
