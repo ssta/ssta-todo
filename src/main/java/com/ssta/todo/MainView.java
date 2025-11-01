@@ -1,5 +1,7 @@
 package com.ssta.todo;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
@@ -32,6 +34,11 @@ public class MainView extends VerticalLayout {
     // Create filter section
     HorizontalLayout filterSection = createFilterSection();
 
+    // Create add button
+    Button addButton = new Button("Add New TODO");
+    addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    addButton.addClickListener(e -> openFormForNewItem());
+
     // Create form
     form = new TodoItemForm();
     form.setSaveHandler(this::saveTodoItem);
@@ -39,7 +46,7 @@ public class MainView extends VerticalLayout {
     form.setVisible(false);
 
     // Add components to view
-    add(title, filterSection, form);
+    add(title, filterSection, addButton, form);
 
     setSizeFull();
     setJustifyContentMode(JustifyContentMode.START);
@@ -107,5 +114,10 @@ public class MainView extends VerticalLayout {
   private void closeForm() {
     form.setVisible(false);
     form.clear();
+  }
+
+  private void openFormForNewItem() {
+    form.setTodoItem(new TodoItem());
+    form.setVisible(true);
   }
 }
