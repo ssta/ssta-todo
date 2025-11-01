@@ -224,18 +224,18 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
 ### Phase 5: CRUD Operations and Data Binding
 
 16. **Implement Add TODO Functionality**
-    - [ ] Wire "Add" button to open form in "create" mode
-    - [ ] Clear form fields
-    - [ ] On save, validate and call service to create new item
-    - [ ] Refresh grid
-    - [ ] Show success notification
+    - [x] Wire "Add" button to open form in "create" mode
+    - [x] Clear form fields
+    - [x] On save, validate and call service to create new item
+    - [x] Refresh grid
+    - [x] Show success notification
 
 17. **Implement Edit TODO Functionality**
-    - [ ] Wire "Edit" button in grid to open form in "edit" mode
-    - [ ] Populate form with selected item data
-    - [ ] On save, validate and call service to update item
-    - [ ] Refresh grid
-    - [ ] Show success notification
+    - [x] Wire "Edit" button in grid to open form in "edit" mode
+    - [x] Populate form with selected item data
+    - [x] On save, validate and call service to update item
+    - [x] Refresh grid
+    - [x] Show success notification
 
 18. **Implement Delete TODO Functionality**
     - [ ] Wire "Delete" button in grid

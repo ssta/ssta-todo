@@ -296,7 +296,8 @@ public class MainView extends VerticalLayout {
   }
 
   private void editTodoItem(TodoItem item) {
-    // TODO: This will be implemented in step 17
+    form.setTodoItem(item);
+    form.setVisible(true);
   }
 
   private void deleteTodoItem(TodoItem item) {
