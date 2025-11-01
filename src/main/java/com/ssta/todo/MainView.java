@@ -5,8 +5,10 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -39,6 +41,7 @@ public class MainView extends VerticalLayout {
 
   private TodoItemForm form;
   private Grid<TodoItem> grid;
+  private Div emptyStateMessage;
 
   public MainView(UserPreferencesService preferencesService, TodoItemService todoItemService) {
     this.preferencesService = preferencesService;
@@ -57,19 +60,28 @@ public class MainView extends VerticalLayout {
       currentPreferences.setShowComplete(true);
     }
 
-    // Create title
+    // Create title with consistent styling
     H1 title = new H1("TODO Application");
-    title.getStyle().set("margin-top", "0");
+    title.getStyle()
+        .set("margin-top", "0")
+        .set("margin-bottom", "var(--lumo-space-l)")
+        .set("color", "var(--lumo-primary-text-color)");
 
-    // Create filter section
+    // Create filter section with consistent spacing
     HorizontalLayout filterSection = createFilterSection();
     filterSection.setWidthFull();
-    filterSection.getStyle().set("flex-wrap", "wrap");
+    filterSection.getStyle()
+        .set("flex-wrap", "wrap")
+        .set("margin-bottom", "var(--lumo-space-m)")
+        .set("padding", "var(--lumo-space-s)")
+        .set("background-color", "var(--lumo-contrast-5pct)")
+        .set("border-radius", "var(--lumo-border-radius-m)");
 
-    // Create add button
+    // Create add button with consistent styling
     Button addButton = new Button("Add New TODO");
     addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     addButton.addClickListener(e -> openFormForNewItem());
+    addButton.getStyle().set("margin-bottom", "var(--lumo-space-m)");
 
     // Create form
     form = new TodoItemForm();
@@ -78,11 +90,15 @@ public class MainView extends VerticalLayout {
     form.setVisible(false);
     form.setWidthFull();
 
+    // Create empty state message (before grid, since grid's refreshGrid() needs it)
+    emptyStateMessage = createEmptyStateMessage();
+    emptyStateMessage.setVisible(false);
+
     // Create grid
     createGrid();
 
     // Add components to view
-    add(title, filterSection, addButton, form, grid);
+    add(title, filterSection, addButton, form, emptyStateMessage, grid);
 
     setSizeFull();
     setJustifyContentMode(JustifyContentMode.START);
@@ -95,7 +111,11 @@ public class MainView extends VerticalLayout {
 
   private HorizontalLayout createFilterSection() {
     H3 filterLabel = new H3("Filter by Status:");
-    filterLabel.getStyle().set("margin-right", "20px");
+    filterLabel.getStyle()
+        .set("margin", "0")
+        .set("margin-right", "var(--lumo-space-l)")
+        .set("font-size", "var(--lumo-font-size-l)")
+        .set("font-weight", "600");
 
     // Create checkboxes bound to preferences
     showTodoCheckbox = new Checkbox("Show TODO");
@@ -130,6 +150,7 @@ public class MainView extends VerticalLayout {
     );
     filterLayout.setAlignItems(Alignment.CENTER);
     filterLayout.setSpacing(true);
+    filterLayout.getStyle().set("gap", "var(--lumo-space-m)");
 
     return filterLayout;
   }
@@ -141,6 +162,42 @@ public class MainView extends VerticalLayout {
       logger.error("Failed to update user preferences", e);
       showErrorNotification("Failed to save filter preferences. Your settings may not be preserved.");
     }
+  }
+
+  private Div createEmptyStateMessage() {
+    Div emptyState = new Div();
+
+    Icon emptyIcon = VaadinIcon.INFO_CIRCLE.create();
+    emptyIcon.setSize("48px");
+    emptyIcon.getStyle()
+        .set("color", "var(--lumo-contrast-50pct)")
+        .set("margin-bottom", "var(--lumo-space-m)");
+
+    Paragraph message = new Paragraph("No TODO items match the current filter.");
+    message.getStyle()
+        .set("color", "var(--lumo-contrast-70pct)")
+        .set("font-size", "var(--lumo-font-size-l)")
+        .set("margin", "0");
+
+    Paragraph hint = new Paragraph("Try adjusting your filters or add a new TODO item.");
+    hint.getStyle()
+        .set("color", "var(--lumo-contrast-50pct)")
+        .set("font-size", "var(--lumo-font-size-s)")
+        .set("margin-top", "var(--lumo-space-s)");
+
+    emptyState.add(emptyIcon, message, hint);
+    emptyState.getStyle()
+        .set("display", "flex")
+        .set("flex-direction", "column")
+        .set("align-items", "center")
+        .set("justify-content", "center")
+        .set("padding", "var(--lumo-space-xl)")
+        .set("background-color", "var(--lumo-contrast-5pct)")
+        .set("border-radius", "var(--lumo-border-radius-l)")
+        .set("min-height", "300px")
+        .set("text-align", "center");
+
+    return emptyState;
   }
 
   private Grid<TodoItem> createGrid() {
@@ -163,8 +220,25 @@ public class MainView extends VerticalLayout {
         case COMPLETE -> statusSpan.getElement().getThemeList().add("badge success");
       }
 
-      // Make it clickable and add click handler to cycle status
-      statusSpan.getStyle().set("cursor", "pointer");
+          // Make it clickable with hover effects
+          statusSpan.getStyle()
+              .set("cursor", "pointer")
+              .set("transition", "all 0.2s ease")
+              .set("user-select", "none");
+
+          // Add hover effect using mouseenter/mouseleave
+          statusSpan.getElement().addEventListener("mouseenter", e -> {
+            statusSpan.getStyle()
+                .set("transform", "scale(1.05)")
+                .set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.2)");
+          });
+
+          statusSpan.getElement().addEventListener("mouseleave", e -> {
+            statusSpan.getStyle()
+                .set("transform", "scale(1)")
+                .set("box-shadow", "none");
+          });
+
       statusSpan.getElement().addEventListener("click", event -> {
         cycleItemStatus(item);
       });
@@ -345,10 +419,21 @@ public class MainView extends VerticalLayout {
       }
 
       grid.setItems(items);
+
+      // Show/hide empty state message
+      if (items.isEmpty()) {
+        emptyStateMessage.setVisible(true);
+        grid.setVisible(false);
+      } else {
+        emptyStateMessage.setVisible(false);
+        grid.setVisible(true);
+      }
     } catch (Exception e) {
       logger.error("Failed to refresh grid", e);
       showErrorNotification("Failed to load TODO items. Please try refreshing the page.");
       grid.setItems(new ArrayList<>());
+      emptyStateMessage.setVisible(true);
+      grid.setVisible(false);
     }
   }
 
