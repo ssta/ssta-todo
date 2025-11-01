@@ -16,6 +16,8 @@ import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Route("")
 public class MainView extends VerticalLayout {
@@ -280,9 +282,33 @@ public class MainView extends VerticalLayout {
   }
 
   private void refreshGrid() {
-    // TODO: Apply filtering based on checkbox states in step 19
-    // For now, just load all items
-    grid.setItems(todoItemService.findAll());
+    // Apply filtering based on checkbox states
+    List<TodoStatus> statusesToShow = new ArrayList<>();
+
+    if (currentPreferences.getShowTodo()) {
+      statusesToShow.add(TodoStatus.TODO);
+    }
+    if (currentPreferences.getShowInProgress()) {
+      statusesToShow.add(TodoStatus.IN_PROGRESS);
+    }
+    if (currentPreferences.getShowComplete()) {
+      statusesToShow.add(TodoStatus.COMPLETE);
+    }
+
+    // Get filtered items from service
+    List<TodoItem> items;
+    if (statusesToShow.isEmpty()) {
+      // If no statuses selected, show empty list
+      items = new ArrayList<>();
+    } else if (statusesToShow.size() == 3) {
+      // If all statuses selected, get all items (optimization)
+      items = todoItemService.findAll();
+    } else {
+      // Get items with selected statuses
+      items = todoItemService.findByStatus(statusesToShow.toArray(new TodoStatus[0]));
+    }
+
+    grid.setItems(items);
   }
 
   private void saveTodoItem(TodoItem item) {
