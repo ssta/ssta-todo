@@ -280,12 +280,12 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [ ] Test edge cases (empty database, all items filtered out)
 
 24. **Documentation and Comments**
-    - [ ] Add inline code comments for complex logic
-    - [ ] Document any configuration needed
-    - [ ] Create simple README with:
-      - [ ] How to run the application
-      - [ ] Database file location
-      - [ ] Basic usage instructions
+    - [x] Add inline code comments for complex logic
+    - [x] Document any configuration needed
+    - [x] Create simple README with:
+        - [x] How to run the application
+        - [x] Database file location
+        - [x] Basic usage instructions
 
 ### Phase 7: Future Preparation
 
