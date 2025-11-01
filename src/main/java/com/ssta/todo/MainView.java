@@ -18,6 +18,8 @@ public class MainView extends VerticalLayout {
 
   private UserPreferences currentPreferences;
 
+  private TodoItemForm form;
+
   public MainView(UserPreferencesService preferencesService) {
     this.preferencesService = preferencesService;
 
@@ -30,8 +32,14 @@ public class MainView extends VerticalLayout {
     // Create filter section
     HorizontalLayout filterSection = createFilterSection();
 
+    // Create form
+    form = new TodoItemForm();
+    form.setSaveHandler(this::saveTodoItem);
+    form.setCancelHandler(this::closeForm);
+    form.setVisible(false);
+
     // Add components to view
-    add(title, filterSection);
+    add(title, filterSection, form);
 
     setSizeFull();
     setJustifyContentMode(JustifyContentMode.START);
@@ -88,5 +96,16 @@ public class MainView extends VerticalLayout {
   private void refreshGrid() {
     // TODO: This will be implemented when we create the grid in step 11
     // For now, this is a placeholder
+  }
+
+  private void saveTodoItem(TodoItem item) {
+    // TODO: This will be wired to the service in later steps
+    // For now, this is a placeholder
+    closeForm();
+  }
+
+  private void closeForm() {
+    form.setVisible(false);
+    form.clear();
   }
 }

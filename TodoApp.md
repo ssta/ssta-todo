@@ -173,15 +173,15 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
         - [x] Persist preferences
 
 10. **Create Add/Edit Form Component**
-    - [ ] Create form with fields:
-      - [ ] Description (TextField, maxLength 400, required)
-      - [ ] Detailed Notes (TextArea, maxLength 400, initially hidden/collapsed)
-      - [ ] Expand/collapse button for detailed notes
-      - [ ] Priority (ComboBox with values 1-5, optional, clearable)
-      - [ ] Due Date (DatePicker, optional, clearable)
-    - [ ] Add Save and Cancel buttons
-    - [ ] Add form validation
-    - [ ] Wire up to service layer
+    - [x] Create form with fields:
+        - [x] Description (TextField, maxLength 400, required)
+        - [x] Detailed Notes (TextArea, maxLength 400, initially hidden/collapsed)
+        - [x] Expand/collapse button for detailed notes
+        - [x] Priority (ComboBox with values 1-5, optional, clearable)
+        - [x] Due Date (DatePicker, optional, clearable)
+    - [x] Add Save and Cancel buttons
+    - [x] Add form validation
+    - [x] Wire up to service layer
 
 ### Phase 4: Vaadin UI - Grid and Data Display
 
