@@ -201,11 +201,11 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [x] Refresh grid after status change
 
 13. **Implement Due Date Visual Indicators**
-    - [ ] Add cell style generator for Due Date column:
-      - [ ] Red/warning style for overdue items (dueDate < LocalDate.now())
-      - [ ] Yellow/highlight style for due today (dueDate = LocalDate.now())
-      - [ ] Normal style for future dates
-    - [ ] Consider adding icon or badge in addition to color
+    - [x] Add cell style generator for Due Date column:
+        - [x] Red/warning style for overdue items (dueDate < LocalDate.now())
+        - [x] Yellow/highlight style for due today (dueDate = LocalDate.now())
+        - [x] Normal style for future dates
+    - [x] Consider adding icon or badge in addition to color
 
 14. **Implement Column Sorting**
     - [ ] Make columns sortable by enabling `setSortable(true)`

@@ -7,11 +7,13 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Route("")
@@ -150,17 +152,50 @@ public class MainView extends VerticalLayout {
         .setFlexGrow(0)
         .setWidth("100px");
 
-    // Due Date column - show empty for null
-    todoGrid.addColumn(item -> {
-          if (item.getDueDate() != null) {
-            return item.getDueDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    // Due Date column - show empty for null, with visual indicators
+    todoGrid.addComponentColumn(item -> {
+          if (item.getDueDate() == null) {
+            return new Span("");
           }
-          return "";
+
+          LocalDate today = LocalDate.now();
+          LocalDate dueDate = item.getDueDate();
+          String formattedDate = dueDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+          HorizontalLayout dateLayout = new HorizontalLayout();
+          dateLayout.setSpacing(true);
+          dateLayout.setAlignItems(Alignment.CENTER);
+
+          Span dateSpan = new Span(formattedDate);
+
+          // Add visual indicators based on due date
+          if (dueDate.isBefore(today)) {
+            // Overdue - red warning style
+            dateSpan.getStyle().set("color", "var(--lumo-error-text-color)");
+            dateSpan.getStyle().set("font-weight", "bold");
+            Icon warningIcon = VaadinIcon.WARNING.create();
+            warningIcon.setColor("var(--lumo-error-color)");
+            warningIcon.setSize("16px");
+            dateLayout.add(warningIcon, dateSpan);
+          } else if (dueDate.isEqual(today)) {
+            // Due today - yellow/warning style
+            dateSpan.getStyle().set("color", "var(--lumo-warning-text-color)");
+            dateSpan.getStyle().set("font-weight", "bold");
+            Icon clockIcon = VaadinIcon.CLOCK.create();
+            clockIcon.setColor("var(--lumo-warning-color)");
+            clockIcon.setSize("16px");
+            dateLayout.add(clockIcon, dateSpan);
+          } else {
+            // Future date - normal style
+            dateLayout.add(dateSpan);
+          }
+
+          return dateLayout;
         })
         .setHeader("Due Date")
         .setKey("dueDate")
         .setFlexGrow(0)
-        .setWidth("150px");
+        .setWidth("180px");
 
     // Actions column with Edit and Delete buttons
     todoGrid.addComponentColumn(item -> {
