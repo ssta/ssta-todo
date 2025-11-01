@@ -3,16 +3,22 @@ package com.ssta.todo;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+
+import java.time.format.DateTimeFormatter;
 
 @Route("")
 public class MainView extends VerticalLayout {
 
   private final UserPreferencesService preferencesService;
+  private final TodoItemService todoItemService;
 
   private Checkbox showTodoCheckbox;
   private Checkbox showInProgressCheckbox;
@@ -21,9 +27,11 @@ public class MainView extends VerticalLayout {
   private UserPreferences currentPreferences;
 
   private TodoItemForm form;
+  private Grid<TodoItem> grid;
 
-  public MainView(UserPreferencesService preferencesService) {
+  public MainView(UserPreferencesService preferencesService, TodoItemService todoItemService) {
     this.preferencesService = preferencesService;
+    this.todoItemService = todoItemService;
 
     // Load current preferences
     currentPreferences = preferencesService.getPreferences();
@@ -45,8 +53,11 @@ public class MainView extends VerticalLayout {
     form.setCancelHandler(this::closeForm);
     form.setVisible(false);
 
+    // Create grid
+    createGrid();
+
     // Add components to view
-    add(title, filterSection, addButton, form);
+    add(title, filterSection, addButton, form, grid);
 
     setSizeFull();
     setJustifyContentMode(JustifyContentMode.START);
@@ -100,15 +111,99 @@ public class MainView extends VerticalLayout {
     preferencesService.updatePreferences(currentPreferences);
   }
 
+  private Grid<TodoItem> createGrid() {
+    Grid<TodoItem> todoGrid = new Grid<>(TodoItem.class, false);
+    todoGrid.setHeight("600px");
+    todoGrid.setWidthFull();
+
+    // Status column - custom component with clickable indicator
+    todoGrid.addComponentColumn(item -> {
+      Span statusSpan = new Span(item.getStatus().getDisplayLabel());
+      statusSpan.getElement().getThemeList().add("badge");
+
+      // Style based on status
+      switch (item.getStatus()) {
+        case TODO -> statusSpan.getElement().getThemeList().add("badge");
+        case IN_PROGRESS -> statusSpan.getElement().getThemeList().add("badge primary");
+        case COMPLETE -> statusSpan.getElement().getThemeList().add("badge success");
+      }
+
+      // Make it clickable (will be wired in step 12)
+      statusSpan.getStyle().set("cursor", "pointer");
+
+      return statusSpan;
+    }).setHeader("Status").setKey("status").setFlexGrow(0).setWidth("150px");
+
+    // Description column
+    todoGrid.addColumn(TodoItem::getDescription)
+        .setHeader("Description")
+        .setKey("description")
+        .setFlexGrow(1);
+
+    // Priority column - show empty for null
+    todoGrid.addColumn(item -> item.getPriority() != null ? item.getPriority().toString() : "")
+        .setHeader("Priority")
+        .setKey("priority")
+        .setFlexGrow(0)
+        .setWidth("100px");
+
+    // Due Date column - show empty for null
+    todoGrid.addColumn(item -> {
+          if (item.getDueDate() != null) {
+            return item.getDueDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+          }
+          return "";
+        })
+        .setHeader("Due Date")
+        .setKey("dueDate")
+        .setFlexGrow(0)
+        .setWidth("150px");
+
+    // Actions column with Edit and Delete buttons
+    todoGrid.addComponentColumn(item -> {
+          Button editButton = new Button("Edit", VaadinIcon.EDIT.create());
+          editButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+          editButton.addClickListener(e -> editTodoItem(item));
+
+          Button deleteButton = new Button("Delete", VaadinIcon.TRASH.create());
+          deleteButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_ERROR);
+          deleteButton.addClickListener(e -> deleteTodoItem(item));
+
+          HorizontalLayout actions = new HorizontalLayout(editButton, deleteButton);
+          actions.setSpacing(true);
+          return actions;
+        })
+        .setHeader("Actions")
+        .setKey("actions")
+        .setFlexGrow(0)
+        .setWidth("200px");
+
+    this.grid = todoGrid;
+
+    // Load initial data
+    refreshGrid();
+
+    return todoGrid;
+  }
+
   private void refreshGrid() {
-    // TODO: This will be implemented when we create the grid in step 11
-    // For now, this is a placeholder
+    // TODO: Apply filtering based on checkbox states in step 19
+    // For now, just load all items
+    grid.setItems(todoItemService.findAll());
   }
 
   private void saveTodoItem(TodoItem item) {
     // TODO: This will be wired to the service in later steps
     // For now, this is a placeholder
     closeForm();
+  }
+
+  private void editTodoItem(TodoItem item) {
+    // TODO: This will be implemented in step 17
+  }
+
+  private void deleteTodoItem(TodoItem item) {
+    // TODO: This will be implemented in step 18
   }
 
   private void closeForm() {

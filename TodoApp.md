@@ -186,13 +186,13 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
 ### Phase 4: Vaadin UI - Grid and Data Display
 
 11. **Create TODO Items Grid**
-    - [ ] Create `Grid<TodoItem>` with columns:
-      - [ ] Status (custom component column with clickable indicator)
-      - [ ] Description (text column)
-      - [ ] Priority (number column, show empty for null)
-      - [ ] Due Date (date column, show empty for null)
-      - [ ] Actions (button column with Edit and Delete)
-    - [ ] Configure grid styling and responsiveness
+    - [x] Create `Grid<TodoItem>` with columns:
+        - [x] Status (custom component column with clickable indicator)
+        - [x] Description (text column)
+        - [x] Priority (number column, show empty for null)
+        - [x] Due Date (date column, show empty for null)
+        - [x] Actions (button column with Edit and Delete)
+    - [x] Configure grid styling and responsiveness
 
 12. **Implement Status Column**
     - [ ] Create custom component for status display (Button or Span with click handler)
