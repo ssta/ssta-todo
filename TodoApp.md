@@ -259,8 +259,8 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [x] Handle database connection issues gracefully
 
 21. **Add Responsive Design**
-    - [ ] Ensure grid columns resize appropriately
-    - [ ] Test on different screen sizes
+    - [x] Ensure grid columns resize appropriately
+    - [x] Test on different screen sizes
     - [ ] Consider mobile layout if needed (out of scope for MVP if not required)
 
 22. **Add UI Polish**

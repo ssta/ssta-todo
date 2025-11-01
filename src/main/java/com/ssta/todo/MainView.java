@@ -59,9 +59,12 @@ public class MainView extends VerticalLayout {
 
     // Create title
     H1 title = new H1("TODO Application");
+    title.getStyle().set("margin-top", "0");
 
     // Create filter section
     HorizontalLayout filterSection = createFilterSection();
+    filterSection.setWidthFull();
+    filterSection.getStyle().set("flex-wrap", "wrap");
 
     // Create add button
     Button addButton = new Button("Add New TODO");
@@ -73,6 +76,7 @@ public class MainView extends VerticalLayout {
     form.setSaveHandler(this::saveTodoItem);
     form.setCancelHandler(this::closeForm);
     form.setVisible(false);
+    form.setWidthFull();
 
     // Create grid
     createGrid();
@@ -82,9 +86,11 @@ public class MainView extends VerticalLayout {
 
     setSizeFull();
     setJustifyContentMode(JustifyContentMode.START);
-    setAlignItems(Alignment.START);
+    setAlignItems(Alignment.STRETCH);
     setPadding(true);
     setSpacing(true);
+    setMaxWidth("1400px");
+    getStyle().set("margin", "0 auto");
   }
 
   private HorizontalLayout createFilterSection() {
@@ -139,9 +145,11 @@ public class MainView extends VerticalLayout {
 
   private Grid<TodoItem> createGrid() {
     Grid<TodoItem> todoGrid = new Grid<>(TodoItem.class, false);
-    todoGrid.setHeight("600px");
+    todoGrid.setHeightFull();
+    todoGrid.setMinHeight("400px");
     todoGrid.setWidthFull();
     todoGrid.setMultiSort(true);
+    todoGrid.setColumnReorderingAllowed(true);
 
     // Status column - custom component with clickable indicator
     Grid.Column<TodoItem> statusColumn = todoGrid.addComponentColumn(item -> {
@@ -166,15 +174,18 @@ public class MainView extends VerticalLayout {
         .setHeader("Status")
         .setKey("status")
         .setFlexGrow(0)
-        .setWidth("150px")
+        .setWidth("120px")
+        .setResizable(true)
         .setSortable(true)
         .setComparator((item1, item2) -> item1.getStatus().compareTo(item2.getStatus()));
 
-    // Description column
+    // Description column - flexible, takes remaining space
     todoGrid.addColumn(TodoItem::getDescription)
         .setHeader("Description")
         .setKey("description")
-        .setFlexGrow(1)
+        .setFlexGrow(3)
+        .setAutoWidth(false)
+        .setResizable(true)
         .setSortable(true)
         .setComparator((item1, item2) -> {
           String desc1 = item1.getDescription() != null ? item1.getDescription() : "";
@@ -187,7 +198,8 @@ public class MainView extends VerticalLayout {
         .setHeader("Priority")
         .setKey("priority")
         .setFlexGrow(0)
-        .setWidth("100px")
+        .setWidth("90px")
+        .setResizable(true)
         .setSortable(true)
         .setComparator((item1, item2) -> {
           // Nulls last, then sort by priority (1 = highest, 5 = lowest)
@@ -239,8 +251,9 @@ public class MainView extends VerticalLayout {
         })
         .setHeader("Due Date")
         .setKey("dueDate")
-        .setFlexGrow(0)
-        .setWidth("180px")
+        .setFlexGrow(1)
+        .setWidth("160px")
+        .setResizable(true)
         .setSortable(true)
         .setComparator((item1, item2) -> {
           // Custom comparator: overdue dates first, then by date, nulls last
@@ -283,7 +296,8 @@ public class MainView extends VerticalLayout {
         .setHeader("Actions")
         .setKey("actions")
         .setFlexGrow(0)
-        .setWidth("200px");
+        .setWidth("180px")
+        .setResizable(true);
 
     // Set default sort order: Due Date (ascending, overdue first) then Priority (ascending)
     Grid.Column<TodoItem> dueDateColumn = todoGrid.getColumnByKey("dueDate");
