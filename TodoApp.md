@@ -124,18 +124,18 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [x] Add display labels for UI
 
 4. **Create Repository Layer**
-   - [ ] Create `TodoItemRepository` interface extending `JpaRepository<TodoItem, Long>`
-   - [ ] Add custom query methods if needed for filtering
+    - [x] Create `TodoItemRepository` interface extending `JpaRepository<TodoItem, Long>`
+    - [x] Add custom query methods if needed for filtering
 
 5. **Create Service Layer**
-   - [ ] Create `TodoItemService` class with methods:
-     - [ ] `findAll()` - get all items
-     - [ ] `findByStatus(TodoStatus...)` - filter by one or more statuses
-     - [ ] `save(TodoItem)` - create/update item
-     - [ ] `delete(Long id)` - delete item
-     - [ ] `cycleStatus(Long id)` - advance item to next status
-     - [ ] `findAllSorted(Comparator)` - get all with custom sort
-   - [ ] Add business logic and validation
+    - [x] Create `TodoItemService` class with methods:
+        - [x] `findAll()` - get all items
+        - [x] `findByStatus(TodoStatus...)` - filter by one or more statuses
+        - [x] `save(TodoItem)` - create/update item
+        - [x] `delete(Long id)` - delete item
+        - [x] `cycleStatus(Long id)` - advance item to next status
+        - [x] `findAllSorted(Comparator)` - get all with custom sort
+    - [x] Add business logic and validation
 
 ### Phase 2: User Preferences Persistence
 
