@@ -157,20 +157,20 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
 ### Phase 3: Vaadin UI - Basic Layout
 
 8. **Create Main View**
-   - [ ] Create `MainView` class annotated with `@Route("")`
-   - [ ] Set up basic Vaadin `VerticalLayout`
-   - [ ] Add application title/header
+    - [x] Create `MainView` class annotated with `@Route("")`
+    - [x] Set up basic Vaadin `VerticalLayout`
+    - [x] Add application title/header
 
 9. **Create Filter Component**
-   - [ ] Create filter section with three checkboxes:
-     - [ ] "Show TODO"
-     - [ ] "Show In Progress"
-     - [ ] "Show Complete"
-   - [ ] Bind checkboxes to UserPreferences
-   - [ ] Add value change listeners to:
-     - [ ] Update filter state in service
-     - [ ] Refresh grid data
-     - [ ] Persist preferences
+    - [x] Create filter section with three checkboxes:
+        - [x] "Show TODO"
+        - [x] "Show In Progress"
+        - [x] "Show Complete"
+    - [x] Bind checkboxes to UserPreferences
+    - [x] Add value change listeners to:
+        - [x] Update filter state in service
+        - [x] Refresh grid data
+        - [x] Persist preferences
 
 10. **Create Add/Edit Form Component**
     - [ ] Create form with fields:
