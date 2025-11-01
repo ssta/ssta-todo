@@ -238,11 +238,11 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [x] Show success notification
 
 18. **Implement Delete TODO Functionality**
-    - [ ] Wire "Delete" button in grid
-    - [ ] Show confirmation dialog
-    - [ ] On confirm, call service to delete item
-    - [ ] Refresh grid
-    - [ ] Show success notification
+    - [x] Wire "Delete" button in grid
+    - [x] Show confirmation dialog
+    - [x] On confirm, call service to delete item
+    - [x] Refresh grid
+    - [x] Show success notification
 
 19. **Implement Data Filtering**
     - [ ] Create `ConfigurableFilterDataProvider` for grid

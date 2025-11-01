@@ -3,6 +3,7 @@ package com.ssta.todo;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
@@ -301,7 +302,28 @@ public class MainView extends VerticalLayout {
   }
 
   private void deleteTodoItem(TodoItem item) {
-    // TODO: This will be implemented in step 18
+    ConfirmDialog dialog = new ConfirmDialog();
+    dialog.setHeader("Delete TODO Item");
+    dialog.setText("Are you sure you want to delete this TODO item: \"" + item.getDescription() + "\"?");
+
+    dialog.setCancelable(true);
+    dialog.setCancelText("Cancel");
+
+    dialog.setConfirmText("Delete");
+    dialog.setConfirmButtonTheme("error primary");
+
+    dialog.addConfirmListener(event -> {
+      try {
+        todoItemService.delete(item.getId());
+        refreshGrid();
+        // TODO: Show success notification (will be implemented in step 20)
+      } catch (Exception e) {
+        // TODO: Show error notification (will be implemented in step 20)
+        e.printStackTrace();
+      }
+    });
+
+    dialog.open();
   }
 
   private void cycleItemStatus(TodoItem item) {
