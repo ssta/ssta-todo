@@ -239,6 +239,14 @@ Planned improvements for future versions:
     - Rendered markdown display for viewing notes
     - Seamless migration - existing plain text notes work as-is in markdown
 
+- **JIRA Ticket Integration**: Link TODO items to JIRA tickets
+    - Optional JIRA ticket reference field (e.g., "PROJ-1234")
+    - Configurable JIRA base URL in application.properties
+    - Automatic hyperlink generation to JIRA tickets
+    - Clickable links in grid that open JIRA in new tab
+    - Format validation and helpful error messages
+    - Support for multiple ticket references
+
 ### Future Considerations
 - Multi-user support with authentication
 - Search and advanced filtering

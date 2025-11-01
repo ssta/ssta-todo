@@ -378,6 +378,35 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
         - [ ] No database schema changes required
         - [ ] No need for format field - markdown handles plain text gracefully
 
+30. **JIRA Ticket Reference Integration**
+    - [ ] Extend TodoItem entity:
+        - [ ] Add `jiraTicket` field (String, optional)
+        - [ ] Add validation for JIRA ticket format (e.g., "PROJ-1234" pattern)
+    - [ ] Add configuration in application.properties:
+        - [ ] Add `jira.base.url` property (e.g., "https://jira.company.com/browse/")
+        - [ ] Add `jira.ticket.pattern` property for validation (e.g., "[A-Z]+-[0-9]+")
+        - [ ] Make URL pattern configurable (e.g., "${jira.base.url}${ticket}")
+    - [ ] Update TodoItemForm:
+        - [ ] Add JIRA ticket TextField (optional)
+        - [ ] Add format validation with helpful error message
+        - [ ] Show preview of full JIRA URL when ticket is entered
+        - [ ] Add "Test Link" button to open JIRA in browser for verification
+    - [ ] Update MainView grid:
+        - [ ] Add JIRA ticket column showing ticket reference
+        - [ ] Render as clickable hyperlink when ticket is present
+        - [ ] Link opens in new browser tab/window
+        - [ ] Show icon (e.g., 🔗 or JIRA logo) next to ticket number
+        - [ ] Handle case where JIRA base URL is not configured (show plain text)
+    - [ ] Configuration management:
+        - [ ] Create service to read and validate JIRA configuration
+        - [ ] Provide sensible defaults or graceful degradation if not configured
+        - [ ] Log warning if JIRA integration is used but base URL not set
+    - [ ] Additional features to consider:
+        - [ ] Tooltip showing full JIRA URL on hover
+        - [ ] Support for multiple ticket references (comma-separated)
+        - [ ] Auto-format ticket text to uppercase
+        - [ ] Quick copy ticket number to clipboard
+
 ---
 
 ## Technical Notes
