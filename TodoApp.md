@@ -208,18 +208,18 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
     - [x] Consider adding icon or badge in addition to color
 
 14. **Implement Column Sorting**
-    - [ ] Make columns sortable by enabling `setSortable(true)`
-    - [ ] Implement multi-column sort with Vaadin's `GridSortOrder`
-    - [ ] Track sort state (column, direction, order)
-    - [ ] Handle sort cycling: Ascending → Descending → Remove
-    - [ ] Set default sort: Due Date ascending (overdue first), then Priority ascending
+    - [x] Make columns sortable by enabling `setSortable(true)`
+    - [x] Implement multi-column sort with Vaadin's `GridSortOrder`
+    - [x] Track sort state (column, direction, order)
+    - [x] Handle sort cycling: Ascending → Descending → Remove
+    - [x] Set default sort: Due Date ascending (overdue first), then Priority ascending
 
 15. **Implement Custom Sort Comparator**
-    - [ ] Create comparator that handles:
-      - [ ] Null values (nulls last)
-      - [ ] Overdue dates (sort before future dates even when ascending)
-      - [ ] Priority ordering (1 before 5)
-    - [ ] Apply to grid's data provider
+    - [x] Create comparator that handles:
+        - [x] Null values (nulls last)
+        - [x] Overdue dates (sort before future dates even when ascending)
+        - [x] Priority ordering (1 before 5)
+    - [x] Apply to grid's data provider
 
 ### Phase 5: CRUD Operations and Data Binding
 

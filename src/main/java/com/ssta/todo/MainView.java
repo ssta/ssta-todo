@@ -117,9 +117,10 @@ public class MainView extends VerticalLayout {
     Grid<TodoItem> todoGrid = new Grid<>(TodoItem.class, false);
     todoGrid.setHeight("600px");
     todoGrid.setWidthFull();
+    todoGrid.setMultiSort(true);
 
     // Status column - custom component with clickable indicator
-    todoGrid.addComponentColumn(item -> {
+    Grid.Column<TodoItem> statusColumn = todoGrid.addComponentColumn(item -> {
       Span statusSpan = new Span(item.getStatus().getDisplayLabel());
       statusSpan.getElement().getThemeList().add("badge");
 
@@ -137,20 +138,40 @@ public class MainView extends VerticalLayout {
       });
 
       return statusSpan;
-    }).setHeader("Status").setKey("status").setFlexGrow(0).setWidth("150px");
+        })
+        .setHeader("Status")
+        .setKey("status")
+        .setFlexGrow(0)
+        .setWidth("150px")
+        .setSortable(true)
+        .setComparator((item1, item2) -> item1.getStatus().compareTo(item2.getStatus()));
 
     // Description column
     todoGrid.addColumn(TodoItem::getDescription)
         .setHeader("Description")
         .setKey("description")
-        .setFlexGrow(1);
+        .setFlexGrow(1)
+        .setSortable(true)
+        .setComparator((item1, item2) -> {
+          String desc1 = item1.getDescription() != null ? item1.getDescription() : "";
+          String desc2 = item2.getDescription() != null ? item2.getDescription() : "";
+          return desc1.compareToIgnoreCase(desc2);
+        });
 
     // Priority column - show empty for null
     todoGrid.addColumn(item -> item.getPriority() != null ? item.getPriority().toString() : "")
         .setHeader("Priority")
         .setKey("priority")
         .setFlexGrow(0)
-        .setWidth("100px");
+        .setWidth("100px")
+        .setSortable(true)
+        .setComparator((item1, item2) -> {
+          // Nulls last, then sort by priority (1 = highest, 5 = lowest)
+          if (item1.getPriority() == null && item2.getPriority() == null) {return 0;}
+          if (item1.getPriority() == null) {return 1;}
+          if (item2.getPriority() == null) {return -1;}
+          return Integer.compare(item1.getPriority(), item2.getPriority());
+        });
 
     // Due Date column - show empty for null, with visual indicators
     todoGrid.addComponentColumn(item -> {
@@ -195,7 +216,31 @@ public class MainView extends VerticalLayout {
         .setHeader("Due Date")
         .setKey("dueDate")
         .setFlexGrow(0)
-        .setWidth("180px");
+        .setWidth("180px")
+        .setSortable(true)
+        .setComparator((item1, item2) -> {
+          // Custom comparator: overdue dates first, then by date, nulls last
+          LocalDate today = LocalDate.now();
+          LocalDate date1 = item1.getDueDate();
+          LocalDate date2 = item2.getDueDate();
+
+          // Handle nulls - nulls last
+          if (date1 == null && date2 == null) {return 0;}
+          if (date1 == null) {return 1;}
+          if (date2 == null) {return -1;}
+
+          // Check if overdue
+          boolean overdue1 = date1.isBefore(today);
+          boolean overdue2 = date2.isBefore(today);
+
+          // Both overdue or both not overdue - sort by date
+          if (overdue1 == overdue2) {
+            return date1.compareTo(date2);
+          }
+
+          // One is overdue, one is not - overdue comes first
+          return overdue1 ? -1 : 1;
+        });
 
     // Actions column with Edit and Delete buttons
     todoGrid.addComponentColumn(item -> {
@@ -215,6 +260,15 @@ public class MainView extends VerticalLayout {
         .setKey("actions")
         .setFlexGrow(0)
         .setWidth("200px");
+
+    // Set default sort order: Due Date (ascending, overdue first) then Priority (ascending)
+    Grid.Column<TodoItem> dueDateColumn = todoGrid.getColumnByKey("dueDate");
+    Grid.Column<TodoItem> priorityColumn = todoGrid.getColumnByKey("priority");
+
+    todoGrid.sort(java.util.List.of(
+        new com.vaadin.flow.component.grid.GridSortOrder<>(dueDateColumn, com.vaadin.flow.data.provider.SortDirection.ASCENDING),
+        new com.vaadin.flow.component.grid.GridSortOrder<>(priorityColumn, com.vaadin.flow.data.provider.SortDirection.ASCENDING)
+    ));
 
     this.grid = todoGrid;
 
