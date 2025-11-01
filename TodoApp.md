@@ -409,6 +409,82 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
 
 ---
 
+## Maybe Someday: Additional Enhancement Ideas
+
+These are enhancement ideas that may be useful if requirements change in the future. They are not currently planned for
+implementation.
+
+### Organization & Structure
+
+- Tags/labels for categorizing items
+- Projects or folders to group related TODOs
+- Sub-tasks or checklist items within a TODO
+- Dependencies between tasks (can't start B until A is done)
+
+### Time Management
+
+- Recurring/repeating tasks
+- Time estimates and time tracking
+- Calendar view integration (Outlook?)
+- Reminders/notifications (email, desktop, mobile)
+- Integration with timesheeting software
+
+### Collaboration (if multi-user in future)
+
+- Assign tasks to team members
+- Comments/discussion threads on items
+- Activity log/audit trail
+- Shared projects/workspaces
+- NOTE: if collaboration is added we would need to beef up the security model by a LOT!
+
+### Productivity Features
+
+- Quick capture (global hotkey, browser extension)
+- Templates for common TODO types
+- Bulk operations (multi-select edit/delete)
+- Drag-and-drop reordering
+- Keyboard shortcuts for power users
+
+### Data & Integration
+
+- Import/export (CSV, JSON, other TODO apps)
+- Backup and restore
+- API for third-party integrations
+- Email-to-TODO (create items via email)
+- Integration with calendar systems (Google Calendar, Outlook)
+- GitHub/GitLab issue integration (similar to JIRA)
+
+### Visualization & Reporting
+
+- Dashboard with statistics and charts
+- Burndown charts for projects
+- Productivity metrics and trends
+- Eisenhower matrix view (urgent/important quadrants)
+- Kanban board view
+- Timeline/Gantt chart view
+
+### Smart Features
+
+- Natural language date parsing ("tomorrow", "next Friday")
+- AI-powered priority suggestions
+- Smart due date recommendations based on history
+- Duplicate detection
+
+### Customization
+
+- Custom fields/metadata
+- Custom statuses beyond TODO/In Progress/Complete
+- Custom views and filters
+- Themes and appearance customization (already planning dark mode)
+
+### Mobile & Sync
+
+- Mobile app (iOS/Android)
+- Cross-device synchronization
+- Offline mode with sync when online
+
+---
+
 ## Technical Notes
 
 ### Package Structure (Flat Layout)
