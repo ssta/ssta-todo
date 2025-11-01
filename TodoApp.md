@@ -140,19 +140,19 @@ This represents the Minimum Viable Product. Additional features (filtering, sear
 ### Phase 2: User Preferences Persistence
 
 6. **Create User Preferences Model**
-   - [ ] Create `UserPreferences` entity with fields:
-     - [ ] `id` (Long, fixed to 1 for single-user app)
-     - [ ] `showTodo` (Boolean, default true)
-     - [ ] `showInProgress` (Boolean, default true)
-     - [ ] `showComplete` (Boolean, default true)
-   - [ ] Add JPA annotations
+    - [x] Create `UserPreferences` entity with fields:
+        - [x] `id` (Long, fixed to 1 for single-user app)
+        - [x] `showTodo` (Boolean, default true)
+        - [x] `showInProgress` (Boolean, default true)
+        - [x] `showComplete` (Boolean, default true)
+    - [x] Add JPA annotations
 
 7. **Create Preferences Repository and Service**
-   - [ ] Create `UserPreferencesRepository` extending `JpaRepository`
-   - [ ] Create `UserPreferencesService` with methods:
-     - [ ] `getPreferences()` - get or create default preferences
-     - [ ] `updatePreferences(UserPreferences)` - save preferences
-   - [ ] Initialize default preferences on first run
+    - [x] Create `UserPreferencesRepository` extending `JpaRepository`
+    - [x] Create `UserPreferencesService` with methods:
+        - [x] `getPreferences()` - get or create default preferences
+        - [x] `updatePreferences(UserPreferences)` - save preferences
+    - [x] Initialize default preferences on first run
 
 ### Phase 3: Vaadin UI - Basic Layout
 
